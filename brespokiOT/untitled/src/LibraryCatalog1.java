@@ -55,7 +55,6 @@ public class LibraryCatalog1 {
         return new ArrayList<>(books);
     }
 
-
 //    arraylist
     public List<Book> findBooksByGenre(String genre){
         List<Book> filteredBooks = new ArrayList<>();

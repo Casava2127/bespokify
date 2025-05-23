@@ -85,7 +85,7 @@ public class LibraryCatalogSystem {
                     System.out.print("Enter genre to find: ");
                     String gen1 = scanner.nextLine();
                     List<String> genres = catalog.findBooksByGenre(gen1).stream().map(Book::getGenre).collect(Collectors.toList());
-// on tap lai
+
                     if (genres.isEmpty()) {
                         System.out.println("No genres available.");
                     } else {
