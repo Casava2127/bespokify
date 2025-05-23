@@ -1,0 +1,117 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+
+
+public class LibraryCatalogSystem {
+    private static void showMenu() {
+        System.out.println("\nLibrary Catalog System");
+        System.out.println("1. Add a book");
+        System.out.println("2. Remove a book");
+        System.out.println("3. Find a book");
+        System.out.println("4. List all books");
+        System.out.println("5. Find books by genre");
+        System.out.println("0. Exit");
+        System.out.print("Your choice: ");
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        LibraryCatalog1 catalog = new LibraryCatalog1();
+        int choice;
+
+        do {
+            showMenu();
+            while (!scanner.hasNextInt()) {
+                System.out.println("Please enter a valid number.");
+                scanner.next();
+                showMenu();
+            }
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Clear buffer
+
+            switch (choice) {
+                case 1:
+                    // Add a book with user input
+                    System.out.print("Enter ISBN: ");
+                    String isbn = scanner.nextLine();
+                    System.out.print("Enter Title: ");
+                    String title = scanner.nextLine();
+                    System.out.print("Enter Author: ");
+                    String author = scanner.nextLine();
+                    System.out.print("Enter Genre: ");
+                    String genre = scanner.nextLine();
+                    System.out.print("Enter Quantity: ");
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Please enter a valid number for quantity.");
+                        scanner.next();
+                    }
+                    int quantity = scanner.nextInt();
+                    scanner.nextLine();
+                    Book newBook = new Book(isbn, title, author, genre, quantity);
+                    catalog.addBook(newBook);
+                    break;
+
+                case 2:
+                    // Remove
+                    System.out.print("Enter ISBN to remove: ");
+                    String isbnToRemove = scanner.nextLine();
+                    catalog.removeBook(isbnToRemove);
+                    break;
+
+                case 3:
+                    // Find  ISBN
+                    System.out.print("Enter ISBN to find: ");
+                    String isbnToFind = scanner.nextLine();
+                    Book foundBook = catalog.findBookByIsbn(isbnToFind);
+                    System.out.println(foundBook != null ? foundBook : "Book not found");
+                    break;
+
+                case 4:
+                    // List all
+                    System.out.println("\nAll Books in Catalog:");
+                    List<Book> allBooks = catalog.listAllBooks();
+                    if (allBooks.isEmpty()) {
+                        System.out.println("No books in catalog.");
+                    } else {
+                        allBooks.forEach(System.out::println);
+                    }
+                    break;
+
+                case 5:
+                    // Find book genre
+                    System.out.print("Enter genre to find: ");
+                    String gen1 = scanner.nextLine();
+                    List<String> genres = catalog.findBooksByGenre(gen1).stream().map(Book::getGenre).collect(Collectors.toList());
+                    // tra ve List<Book>-> chuyen thanh stream -> Mỗi đối tượng `Book` trong luồng được biến đổi thành chuỗi thể loại của nos- >hu thập các phần tử trong luồng và chuyển chúng thành một List
+                    if (genres.isEmpty()) {
+                        System.out.println("No genres available.");
+                    } else {
+                        System.out.println("\nAvailable Genres:");
+                        genres.forEach(System.out::println);
+                        System.out.print("Enter Genre to search: ");
+                        String searchGenre = scanner.nextLine();
+                        List<Book> genreBooks = catalog.findBooksByGenre(searchGenre);
+                        if (genreBooks.isEmpty()) {
+                            System.out.println("No books found for genre: " + searchGenre);
+                        } else {
+                            genreBooks.forEach(System.out::println);
+                        }
+                    }
+                    break;
+
+                case 0:
+                    System.out.println("Exiting Library Catalog System.");
+
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 0);
+
+        scanner.close();
+    }
+}
